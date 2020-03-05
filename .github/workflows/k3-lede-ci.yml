@@ -60,6 +60,8 @@ jobs:
           
       - name: 更新 feeds
         run: |
+          ./scripts/feeds clean
+
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
