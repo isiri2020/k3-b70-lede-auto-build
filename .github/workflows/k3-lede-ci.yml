@@ -10,7 +10,6 @@
 name: k3-lede-ci
 
 on:
-  watch:
   push:
     branches: master
   schedule:
