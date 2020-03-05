@@ -47,7 +47,9 @@ jobs:
           REPO_URL: https://github.com/coolsnowwolf/lede
           REPO_BRANCH: master
         run: |
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH .
+          git clone --depth 1 $REPO_URL -b $REPO_BRANCH ./lede
+          cp -rf ./lede/* .
+          rm -rf ./lede/
 
       - name: 克隆自定义源码
         run: |
@@ -56,7 +58,6 @@ jobs:
           cd coolsong
           git clone https://github.com/tty228/luci-app-serverchan.git
           git clone https://github.com/jerrykuku/luci-theme-argon.git
-          rm -rf OpenClash
           
       - name: 更新 feeds
         run: |
@@ -91,5 +92,5 @@ jobs:
       - name: 上传 artifact
         uses: actions/upload-artifact@master
         with:
-          name: OpenWrt firmware
+          name: Lede firmware
           path: ./bin/targets/
