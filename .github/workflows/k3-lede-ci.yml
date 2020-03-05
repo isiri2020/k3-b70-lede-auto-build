@@ -54,10 +54,10 @@ jobs:
       - name: 克隆自定义源码
         run: |
           cd package
-          mkdir coolsong
-          cd coolsong
+          mkdir lazeyliu
+          cd lazeyliu
           git clone https://github.com/tty228/luci-app-serverchan.git
-          git clone https://github.com/jerrykuku/luci-theme-argon.git
+          git clone https://github.com/pymumu/smartdns.git
           
       - name: 更新 feeds
         run: |
@@ -87,7 +87,10 @@ jobs:
           du -h --max-depth=1 ./bin
 
       - name: 准备 artifact
-        run: find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+        run: |
+          find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+          # 只要k3 相关
+          ls | grep -v k3 | xargs rm -rf {}
 
       - name: 上传 artifact
         uses: actions/upload-artifact@master
