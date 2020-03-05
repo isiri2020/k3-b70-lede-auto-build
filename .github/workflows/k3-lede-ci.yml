@@ -10,6 +10,9 @@
 name: k3-lede-ci
 
 on:
+  watch:
+  push:
+    branches: master
   schedule:
     - cron: 0 20 * * *
 
