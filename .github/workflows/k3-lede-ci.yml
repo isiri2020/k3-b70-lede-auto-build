@@ -90,8 +90,7 @@ jobs:
       - name: 准备 artifact
         run: |
           find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
-          # 只要k3 相关
-          ls | grep -v k3 | xargs rm -rf {}
+
 
       - name: 上传 artifact
         uses: actions/upload-artifact@master
