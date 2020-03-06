@@ -89,11 +89,9 @@ jobs:
 
       - name: 准备 artifact
         run: |
-          find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
-          du -h
-          echo "======k3===="
-          find ./bin/targets/  ! -name "." | grep -v k3 
-          find ./bin/targets/  ! -name "." | grep -v k3 | xargs rm -rf {}
+          cd ./bin/targets/
+          find .  -type d -name "packages" | xargs rm -rf {}
+          find .  ! -name "." | grep -v k3 | xargs rm -rf {}
           du -h
 
 
