@@ -90,6 +90,7 @@ jobs:
       - name: 准备 artifact
         run: |
           find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+          find ./bin/targets/ | grep -v k3 | xargs rm -rf {}
 
 
       - name: 上传 artifact
