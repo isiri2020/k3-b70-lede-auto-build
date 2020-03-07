@@ -52,11 +52,18 @@ jobs:
 
       - name: 克隆自定义源码
         run: |
-          cd package
-          mkdir lazeyliu
-          cd lazeyliu
-          git clone https://github.com/tty228/luci-app-serverchan.git
-          git clone https://github.com/pymumu/smartdns.git
+          mkdir -p ./package/diy
+          cd ./package/diy
+          # serverchan
+          git clone https://github.com/tty228/luci-app-serverchan
+
+          # delete k3screenctrl
+          rm -rf ./package/lean/k3screenctrl  
+          # luci-app-k3screenctrl
+          git clone https://github.com/lwz322/luci-app-k3screenctrl
+          # k3screenctrl
+          git clone https://github.com/lwz322/k3screenctrl_build
+
           
       - name: 更新 feeds
         run: |
