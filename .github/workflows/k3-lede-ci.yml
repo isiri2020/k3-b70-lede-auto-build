@@ -55,14 +55,18 @@ jobs:
           mkdir -p ./package/diy
           cd ./package/diy
           # serverchan
-          git clone https://github.com/tty228/luci-app-serverchan
+          git clone https://github.com/tty228/luci-app-serverchan.git    luci-app-serverchan
 
           # delete k3screenctrl
-          rm -rf ./package/lean/k3screenctrl  
+          rm -rf ../lean/k3screenctrl  
           # luci-app-k3screenctrl
-          git clone https://github.com/lwz322/luci-app-k3screenctrl
+          git clone https://github.com/lwz322/luci-app-k3screenctrl.git  luci-app-k3screenctrl
           # k3screenctrl
-          git clone https://github.com/lwz322/k3screenctrl_build
+          git clone https://github.com/lwz322/k3screenctrl_build.git     k3screenctrl
+         
+          # theme
+          rm -rf ../lean/luci-theme-argon  
+          git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git luci-theme-argon
 
           
       - name: 更新 feeds
