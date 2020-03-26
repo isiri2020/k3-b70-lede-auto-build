@@ -1,66 +1,70 @@
-#
-# This is free software, lisence use MIT.
-# 
-# Copyright (C) 2019 P3TERX <https://p3terx.com>
-# Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
-# 
-# <https://github.com/KFERMercer/OpenWrt-CI>
-# 
-
-name: b70-lede-ci
+name: 编译 OpenWrt-B70
 
 on:
   push:
     branches: master
   schedule:
-    - cron: 0 20 * * *
-
-jobs:
-
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
+    - cron: 0 12 * * *
+steps:
       - name: 检出本项目
         uses: actions/checkout@master
         with:
           ref: master
+          
+      - name: 校验本地文件
+        uses: actions/checkout@v1
 
-      - name: 清理空间
+      - name: 安装编译环境
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          docker rmi `docker images -q`
           sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
           sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
-          sudo -E apt-get update
-          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install wget build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
+          sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
-
           df -h
 
-      - name: 克隆lede源码
+      - name: 下载源码
         env: 
-          REPO_URL: https://github.com/coolsnowwolf/lede
-          REPO_BRANCH: master
+          REPO_URL: https://github.com/Lienol/openwrt.git
         run: |
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH ./lede
-          cp -rf ./lede/* .
-          rm -rf ./lede/
+          git clone --depth 1 $REPO_URL -b ./openwrt
+          cp -rf ./openwrt/* .
+          rm -rf ./openwrt/
 
-      - name: 克隆自定义源码
+      - name: 自定义扩展文件
         run: |
           mkdir -p ./package/diy
           cd ./package/diy
-          # serverchan
-          git clone https://github.com/tty228/luci-app-serverchan.git    luci-app-serverchan
+          
+          # luci-theme-argon
+          git clone -b 19.07_stable https://github.com/jerrykuku/luci-theme-argon software/luci-theme-argon
 
-          # theme
-          rm -rf ../lean/luci-theme-argon  
-          git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git luci-theme-argon
-
+          # UnblockNeteaseMusicGo (包含后端和前端)
+          git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic software/unblock-neteasemusic-go
+          ## $(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/UnblockNeteaseMusic
+          sed -i '/.*upx /d' software/unblock-neteasemusic-go/UnblockNeteaseMusic/Makefile
+          
+          # smartdns
+          git clone https://github.com/getwin/openwrt-smartdns software/smartdns
+          ## git clone https://github.com/pymumu/luci-app-smartdns software/luci-app-smartdns
+          git clone -b dev-19.07 https://github.com/tty228/luci-app-smartdns software/luci-app-smartdns
+          # fix for compiling
+          sed -i 's/\.\.\/\.\.\/luci\.mk/\$(TOPDIR)\/feeds\/luci\/luci\.mk/g' software/luci-app-smartdns/Makefile
+          
+          # KMS
+          git clone https://github.com/flytosky-f/openwrt-vlmcsd software/vlmcsd
+          # git clone https://github.com/flytosky-f/luci-app-vlmcsd software/luci-app-vlmcsd
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-vlmcsd software/luci-app-vlmcsd
+          
+          # flowoffload (依赖 pdnsd-alt)
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/shortcut-fe software/shortcut-fe
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-sfe software/luci-app-sfe
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-flowoffload software/luci-app-flowoffload
+          
           
       - name: 更新 feeds
         run: |
