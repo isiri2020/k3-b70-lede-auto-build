@@ -32,8 +32,8 @@ jobs:
 
       - name: 下载源码
         env: 
-          REPO_URL: https://github.com/Lienol/openwrt.git
-          REPO_BRANCH: dev-19.07
+          REPO_URL: https://github.com/openwrt/openwrt.git
+          REPO_BRANCH: openwrt-19.07
         run: |
           git clone --depth 1 $REPO_URL ./openwrt
           cp -rf ./openwrt/* .
@@ -43,9 +43,36 @@ jobs:
         run: |
           mkdir -p ./package/diy
           cd ./package/diy
+          # luci-theme-argon
+          git clone -b 19.07_stable https://github.com/jerrykuku/luci-theme-argon luci-theme-argon
+          # UnblockNeteaseMusicGo (包含后端和前端)
+          git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic       unblock-neteasemusic-go
+          ## $(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/UnblockNeteaseMusic
+          sed -i '/.*upx /d' unblock-neteasemusic-go/UnblockNeteaseMusic/Makefile
+          
+          # smartdns
+          git clone https://github.com/getwin/openwrt-smartdns                      smartdns
+          ## git clone https://github.com/pymumu/luci-app-smartdns                  luci-app-smartdns
+          git clone -b dev-19.07 https://github.com/tty228/luci-app-smartdns        luci-app-smartdns
+          # fix for compiling
+          sed -i 's/\.\.\/\.\.\/luci\.mk/\$(TOPDIR)\/feeds\/luci\/luci\.mk/g'       luci-app-smartdns/Makefile
+          
+          # KMS
+          git clone https://github.com/flytosky-f/openwrt-vlmcsd             vlmcsd
+          # git clone https://github.com/flytosky-f/luci-app-vlmcsd          luci-app-vlmcsd
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-vlmcsd      luci-app-vlmcsd
+          
+          # pdnsd-alt
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/pdnsd-alt            pdnsd-alt
+          # flowoffload (依赖 pdnsd-alt)
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/shortcut-fe          shortcut-fe
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-sfe         luci-app-sfe
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-flowoffload luci-app-flowoffload
+          
           
       - name: 更新 feeds
         run: |
+          # echo "src-git lienol https://github.com/Lienol/openwrt-package.git" >> feeds.conf.default
           ./scripts/feeds clean
 
           ./scripts/feeds update -a
