@@ -64,6 +64,9 @@ jobs:
           # git clone https://github.com/flytosky-f/luci-app-vlmcsd          luci-app-vlmcsd
           svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-vlmcsd      luci-app-vlmcsd
           
+          # pdnsd-alt
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/pdnsd-alt            pdnsd-alt
+
           # flowoffload (依赖 pdnsd-alt)
           svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/shortcut-fe          shortcut-fe
           svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-sfe         luci-app-sfe
