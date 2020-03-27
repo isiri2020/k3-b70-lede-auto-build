@@ -45,29 +45,29 @@ jobs:
           cd ./package/diy
           
           # luci-theme-argon
-          git clone -b 19.07_stable https://github.com/jerrykuku/luci-theme-argon software/luci-theme-argon
+          git clone -b 19.07_stable https://github.com/jerrykuku/luci-theme-argon luci-theme-argon
 
           # UnblockNeteaseMusicGo (包含后端和前端)
-          git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic software/unblock-neteasemusic-go
+          git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic       unblock-neteasemusic-go
           ## $(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/UnblockNeteaseMusic
-          sed -i '/.*upx /d' software/unblock-neteasemusic-go/UnblockNeteaseMusic/Makefile
+          sed -i '/.*upx /d' unblock-neteasemusic-go/UnblockNeteaseMusic/Makefile
           
           # smartdns
-          git clone https://github.com/getwin/openwrt-smartdns software/smartdns
-          ## git clone https://github.com/pymumu/luci-app-smartdns software/luci-app-smartdns
-          git clone -b dev-19.07 https://github.com/tty228/luci-app-smartdns software/luci-app-smartdns
+          git clone https://github.com/getwin/openwrt-smartdns                      smartdns
+          ## git clone https://github.com/pymumu/luci-app-smartdns                  luci-app-smartdns
+          git clone -b dev-19.07 https://github.com/tty228/luci-app-smartdns        luci-app-smartdns
           # fix for compiling
-          sed -i 's/\.\.\/\.\.\/luci\.mk/\$(TOPDIR)\/feeds\/luci\/luci\.mk/g' software/luci-app-smartdns/Makefile
+          sed -i 's/\.\.\/\.\.\/luci\.mk/\$(TOPDIR)\/feeds\/luci\/luci\.mk/g'       luci-app-smartdns/Makefile
           
           # KMS
-          git clone https://github.com/flytosky-f/openwrt-vlmcsd software/vlmcsd
-          # git clone https://github.com/flytosky-f/luci-app-vlmcsd software/luci-app-vlmcsd
-          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-vlmcsd software/luci-app-vlmcsd
+          git clone https://github.com/flytosky-f/openwrt-vlmcsd             vlmcsd
+          # git clone https://github.com/flytosky-f/luci-app-vlmcsd          luci-app-vlmcsd
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-vlmcsd      luci-app-vlmcsd
           
           # flowoffload (依赖 pdnsd-alt)
-          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/shortcut-fe software/shortcut-fe
-          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-sfe software/luci-app-sfe
-          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-flowoffload software/luci-app-flowoffload
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/shortcut-fe          shortcut-fe
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-sfe         luci-app-sfe
+          svn checkout https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-flowoffload luci-app-flowoffload
           
           
       - name: 更新 feeds
