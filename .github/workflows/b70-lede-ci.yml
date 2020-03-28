@@ -76,7 +76,7 @@ jobs:
       - name: 准备 artifact
         run: |
           find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
-          find ./bin/targets/ -type f -name "*.*" | grep -v hiwifi  | xargs rm -rf {}
+          find ./bin/targets/ -type f -name "*.*" | grep -v hc5962  | xargs rm -rf {}
 
 
 
