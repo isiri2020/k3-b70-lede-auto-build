@@ -32,8 +32,8 @@ jobs:
 
       - name: 下载源码
         env: 
-          REPO_URL: https://github.com/openwrt/openwrt.git
-          REPO_BRANCH: openwrt-19.07
+          REPO_URL: https://github.com/Lienol/openwrt
+          REPO_BRANCH: dev-19.07
         run: |
           git clone --depth 1 $REPO_URL ./openwrt
           cp -rf ./openwrt/* .
@@ -72,7 +72,6 @@ jobs:
           
       - name: 更新 feeds
         run: |
-          # echo "src-git lienol https://github.com/Lienol/openwrt-package.git" >> feeds.conf.default
           ./scripts/feeds clean
 
           ./scripts/feeds update -a
