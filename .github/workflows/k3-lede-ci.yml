@@ -74,7 +74,6 @@ jobs:
       - name: 更新 feeds
         run: |
           ./scripts/feeds clean
-          src-git lienol https://github.com/Lienol/openwrt-package
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
