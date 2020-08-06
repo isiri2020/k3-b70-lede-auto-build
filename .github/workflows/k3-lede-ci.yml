@@ -64,6 +64,7 @@ jobs:
           git clone https://github.com/lwz322/luci-app-k3screenctrl.git  luci-app-k3screenctrl
           # k3screenctrl
           git clone https://github.com/lwz322/k3screenctrl_build.git     k3screenctrl
+          
          
           # theme
           rm -rf ../lean/luci-theme-argon  
@@ -73,7 +74,7 @@ jobs:
       - name: 更新 feeds
         run: |
           ./scripts/feeds clean
-
+          src-git lienol https://github.com/Lienol/openwrt-package
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
