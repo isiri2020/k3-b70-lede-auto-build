@@ -64,13 +64,10 @@ jobs:
           git clone https://github.com/lwz322/luci-app-k3screenctrl.git  luci-app-k3screenctrl
           # k3screenctrl
           git clone https://github.com/lwz322/k3screenctrl_build.git     k3screenctrl
-          git clone https://github.com/awesome-openwrt/luci-app-ipsec-vpnserver.git
           git clone https://github.com/xiaorouji/openwrt-package.git
           
          
           # theme
-          rm -rf ../lean/luci-theme-infinityfreedom 
-          git clone https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom.git
 
           
       - name: 更新 feeds
